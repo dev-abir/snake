@@ -18,16 +18,16 @@ const sf::RectangleShape & Snake::getHeadBounds() const {
 void Snake::setNewFoodPosition(sf::RectangleShape & food) const {
 	// This is not a good way to generate food position, especially
 	// when snake is very large... I may change it in the future...
-	bool notIntersect = true;
+	bool intersect = false;
 	while (true) {
 		food.setPosition((int)(rand() % SCREEN_WIDTH), (int)(rand() % SCREEN_HEIGHT));
 		for (auto & cell : snake_dq) {
 			if (cell.body.getGlobalBounds().intersects(food.getGlobalBounds())) {
-				notIntersect = false;
+				intersect = true;
 				break;
 			}
 		}
-		if (notIntersect) break;
+		if (!intersect) break;
 	}
 }
 
@@ -41,7 +41,7 @@ void Snake::grow() {
 	else if (tailDirection == direction::RIGHT) newTailPosition.x -= SNAKE_CELL_WIDTH;
 	wrapIfNecessary(newTailPosition);
 	newTail.body.setPosition(newTailPosition);
-	snake_dq.push_back(newTail); // emplace_front not needed...
+	snake_dq.push_back(newTail);
 }
 
 void Snake::draw(sf::RenderTarget &target, sf::RenderStates states) const {
@@ -95,7 +95,7 @@ void Snake::addCellAtFront(sf::Vector2f && bodyPosition, const direction bodyDir
 	wrapIfNecessary(bodyPosition);
 	newHead.body.setPosition(bodyPosition);
 	newHead.bodyDirection = bodyDirection;
-	snake_dq.push_front(newHead); // emplace_front not needed...
+	snake_dq.push_front(newHead);
 	snake_dq.pop_back();
 }
 
