@@ -1,0 +1,7 @@
+
+#binaries
+/Debug/
+/Release/
+
+#external libraries
+/lib/
