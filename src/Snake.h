@@ -2,7 +2,6 @@
 #define SNAKE_H
 
 #include <deque>
-#include <iostream>
 
 #include <SFML/Graphics.hpp>
 
@@ -21,16 +20,13 @@ public:
 	void grow();
 
 private:
-	enum direction {
+	enum class direction {
 		UP, DOWN, LEFT, RIGHT
 	};
 	struct Cell {
 		sf::RectangleShape body;
 		direction bodyDirection;
 		Cell(sf::RectangleShape body, direction bodyDirection) : body(body), bodyDirection(bodyDirection) {}
-
-		Cell& operator= (const Cell &other) = default;
-		Cell(const Cell &other) = default;
 	};
 	std::deque<Cell> snake_dq; // TODO: allocating statically may cause out of memory problems
 

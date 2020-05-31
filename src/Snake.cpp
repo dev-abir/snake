@@ -21,7 +21,7 @@ void Snake::setNewFoodPosition(sf::RectangleShape & food) const {
 	bool intersect = false;
 	while (true) {
 		food.setPosition((int)(rand() % SCREEN_WIDTH), (int)(rand() % SCREEN_HEIGHT));
-		for (auto & cell : snake_dq) {
+		for (const Cell & cell : snake_dq) {
 			if (cell.body.getGlobalBounds().intersects(food.getGlobalBounds())) {
 				intersect = true;
 				break;
@@ -32,27 +32,31 @@ void Snake::setNewFoodPosition(sf::RectangleShape & food) const {
 }
 
 void Snake::grow() {
-	auto newTail = *snake_dq.end();
-	auto tailDirection = newTail.bodyDirection;
-	auto newTailPosition = newTail.body.getPosition();
+	Cell newTail = *(--snake_dq.end()); // making a copy of the last-but-one cell
+										// TODO(RESEARCH): for some reason the snake_dq.pop_back();
+										// in Snake::addCellAtFront(...) doesn't delete the
+										// last cell till this point (the last cell will be deleted in the future)
+										// so I am copying the last-but-one cell... BTW, snake_dq.end()--, will not work...
+	direction tailDirection = newTail.bodyDirection;
+	sf::Vector2f newTailPosition = newTail.body.getPosition();
 	if (tailDirection == direction::UP) newTailPosition.y += SNAKE_CELL_HEIGHT;
 	else if (tailDirection == direction::DOWN) newTailPosition.y -= SNAKE_CELL_HEIGHT;
 	else if (tailDirection == direction::LEFT) newTailPosition.x += SNAKE_CELL_WIDTH;
 	else if (tailDirection == direction::RIGHT) newTailPosition.x -= SNAKE_CELL_WIDTH;
 	wrapIfNecessary(newTailPosition);
-	newTail.body.setPosition(newTailPosition);
-	snake_dq.push_back(newTail);
+	newTail.body.setPosition(newTailPosition); // changing it's direction
+	snake_dq.push_back(newTail); // push it to the snake_dq
 }
 
 void Snake::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-	for (auto & cell : snake_dq) {
+	for (const Cell & cell : snake_dq) {
 		target.draw(cell.body, states);
 	}
 }
 
 void Snake::moveUp() {
 	if (snake_dq.begin()->bodyDirection != direction::DOWN) {
-		auto oldHeadBody = snake_dq.begin()->body;
+		sf::RectangleShape oldHeadBody = snake_dq.begin()->body;
 		addCellAtFront(
 				sf::Vector2f(oldHeadBody.getPosition().x, oldHeadBody.getPosition().y - SNAKE_CELL_HEIGHT),
 				direction::UP
@@ -62,7 +66,7 @@ void Snake::moveUp() {
 
 void Snake::moveDown() {
 	if (snake_dq.begin()->bodyDirection != direction::UP) {
-		auto oldHeadBody = snake_dq.begin()->body;
+		sf::RectangleShape oldHeadBody = snake_dq.begin()->body;
 		addCellAtFront(
 				sf::Vector2f(oldHeadBody.getPosition().x, oldHeadBody.getPosition().y + SNAKE_CELL_HEIGHT),
 				direction::DOWN
@@ -72,7 +76,7 @@ void Snake::moveDown() {
 
 void Snake::moveLeft() {
 	if (snake_dq.begin()->bodyDirection != direction::RIGHT) {
-		auto oldHeadBody = snake_dq.begin()->body;
+		sf::RectangleShape oldHeadBody = snake_dq.begin()->body;
 		addCellAtFront(
 				sf::Vector2f(oldHeadBody.getPosition().x - SNAKE_CELL_WIDTH, oldHeadBody.getPosition().y),
 				direction::LEFT
@@ -82,7 +86,7 @@ void Snake::moveLeft() {
 
 void Snake::moveRight() {
 	if (snake_dq.begin()->bodyDirection != direction::LEFT) {
-		auto oldHeadBody = snake_dq.begin()->body;
+		sf::RectangleShape oldHeadBody = snake_dq.begin()->body;
 		addCellAtFront(
 				sf::Vector2f(oldHeadBody.getPosition().x + SNAKE_CELL_WIDTH, oldHeadBody.getPosition().y),
 				direction::RIGHT
@@ -91,12 +95,12 @@ void Snake::moveRight() {
 }
 
 void Snake::addCellAtFront(sf::Vector2f && bodyPosition, const direction bodyDirection) {
-	auto newHead = *snake_dq.begin();
+	Cell newHead = *snake_dq.begin(); // copy the previous head
 	wrapIfNecessary(bodyPosition);
-	newHead.body.setPosition(bodyPosition);
-	newHead.bodyDirection = bodyDirection;
-	snake_dq.push_front(newHead);
-	snake_dq.pop_back();
+	newHead.body.setPosition(bodyPosition); // change it's position,
+	newHead.bodyDirection = bodyDirection; // and direction
+	snake_dq.push_front(newHead); // push it to the snake_dq
+	snake_dq.pop_back(); // delete the last cell
 }
 
 void Snake::wrapIfNecessary(sf::Vector2f & headPosition) {
