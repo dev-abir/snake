@@ -4,7 +4,13 @@
 #define SCREEN_WIDTH 500
 #define SCREEN_HEIGHT SCREEN_WIDTH
 #define TITLE "snake game"
-#define FPS 60
+
+// #define FRAME_CAP false // will automatically adjust FPS according to your monitor's refresh rate
+#define SPEED 30 // equivalent to defining custom FPS [if you define this, then FRAME_CAP will become UNDEFINED]
+
+#ifdef SPEED
+#undef FRAME_CAP
+#endif // SPEED
 
 #define SNAKE_CELL_WIDTH 10
 #define SNAKE_CELL_HEIGHT SNAKE_CELL_WIDTH

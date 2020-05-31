@@ -8,7 +8,11 @@
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), TITLE);
-	window.setFramerateLimit(FPS);
+#ifdef SPEED
+	window.setFramerateLimit(SPEED);
+#else
+	window.setVerticalSyncEnabled(true);
+#endif
 
 	Snake snake;
 	sf::RectangleShape food(sf::Vector2f(FOOD_WIDTH, FOOD_HEIGHT)); // I may create food class later, but for now.....

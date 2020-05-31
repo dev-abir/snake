@@ -8,6 +8,7 @@ Snake::Snake() {
 		);
 		snake_dq[i].body.setPosition(SCREEN_WIDTH / 2 + (SNAKE_CELL_WIDTH * i) + SNAKE_CELL_BORDER_WIDTH, SCREEN_HEIGHT / 2 + SNAKE_CELL_BORDER_WIDTH);
 		snake_dq[i].body.setFillColor(sf::Color::Green);
+		snake_dq[0].body.setFillColor(sf::Color::Magenta);
 	}
 }
 
@@ -95,18 +96,20 @@ void Snake::moveRight() {
 }
 
 void Snake::addCellAtFront(sf::Vector2f && bodyPosition, const direction bodyDirection) {
+	snake_dq.begin()->body.setFillColor(sf::Color::Green); // set previous head color to Green
 	Cell newHead = *snake_dq.begin(); // copy the previous head
 	wrapIfNecessary(bodyPosition);
 	newHead.body.setPosition(bodyPosition); // change it's position,
-	newHead.bodyDirection = bodyDirection; // and direction
+	newHead.bodyDirection = bodyDirection; // direction
+	newHead.body.setFillColor(sf::Color::Magenta); // it's color(head's color is different from body color)
 	snake_dq.push_front(newHead); // push it to the snake_dq
 	snake_dq.pop_back(); // delete the last cell
 }
 
 void Snake::wrapIfNecessary(sf::Vector2f & headPosition) {
-	if (headPosition.x > SCREEN_WIDTH) headPosition.x = 0;
-	else if (headPosition.x < 0) headPosition.x = SCREEN_WIDTH - SNAKE_CELL_WIDTH;
+	if (headPosition.x >= SCREEN_WIDTH) headPosition.x = 0;
+	else if (headPosition.x <= 0) headPosition.x = SCREEN_WIDTH - SNAKE_CELL_WIDTH;
 
-	if (headPosition.y > SCREEN_HEIGHT) headPosition.y = 0;
-	else if (headPosition.y < 0) headPosition.y = SCREEN_HEIGHT - SNAKE_CELL_HEIGHT;
+	if (headPosition.y >= SCREEN_HEIGHT) headPosition.y = 0;
+	else if (headPosition.y <= 0) headPosition.y = SCREEN_HEIGHT - SNAKE_CELL_HEIGHT;
 }
