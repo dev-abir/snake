@@ -107,9 +107,9 @@ void Snake::addCellAtFront(sf::Vector2f && bodyPosition, const direction bodyDir
 }
 
 void Snake::wrapIfNecessary(sf::Vector2f & headPosition) {
-	if (headPosition.x >= SCREEN_WIDTH) headPosition.x = 0;
-	else if (headPosition.x <= 0) headPosition.x = SCREEN_WIDTH - SNAKE_CELL_WIDTH;
+	if (headPosition.x >= SCREEN_WIDTH) headPosition.x = 0 + SNAKE_CELL_BORDER_WIDTH;
+	else if (headPosition.x <= 0) headPosition.x = SCREEN_WIDTH - SNAKE_CELL_WIDTH + SNAKE_CELL_BORDER_WIDTH;
 
-	if (headPosition.y >= SCREEN_HEIGHT) headPosition.y = 0;
-	else if (headPosition.y <= 0) headPosition.y = SCREEN_HEIGHT - SNAKE_CELL_HEIGHT;
+	if (headPosition.y >= SCREEN_HEIGHT) headPosition.y = 0 + SNAKE_CELL_BORDER_WIDTH;
+	else if (headPosition.y <= 0) headPosition.y = SCREEN_HEIGHT - SNAKE_CELL_HEIGHT + SNAKE_CELL_BORDER_WIDTH;
 }
