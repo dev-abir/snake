@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <memory>
+#include <array>
 
 #include <SFML/Graphics.hpp>
 
@@ -58,6 +60,8 @@ int main() {
 		window.draw(food);
 		window.draw(snake);
 		window.display();
+
+		if (snake.isDied()) { std::cout << "snake hits itself" << std::endl; window.close(); }
 	}
 
 	return 0;
