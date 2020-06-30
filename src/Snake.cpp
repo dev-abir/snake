@@ -17,7 +17,6 @@ Snake::Snake() : died(false) {
 		);
 		snake_dq[i].body.setPosition(SCREEN_WIDTH / 2 + (SNAKE_CELL_WIDTH * i) + SNAKE_CELL_BORDER_WIDTH, SCREEN_HEIGHT / 2 + SNAKE_CELL_BORDER_WIDTH);
 		setBoardElement(snake_dq[i].body.getPosition(), true);
-		// std::cout << SCREEN_WIDTH / 2 + (SNAKE_CELL_WIDTH * i) + SNAKE_CELL_BORDER_WIDTH << "\t" << SCREEN_HEIGHT / 2 + SNAKE_CELL_BORDER_WIDTH << "\n";
 		snake_dq[i].body.setFillColor(sf::Color::Green);
 	}
 	snake_dq[0].body.setFillColor(sf::Color::Magenta); // set the head's color different than the body color....
@@ -62,10 +61,9 @@ void Snake::grow() {
 	wrapIfNecessary(newTailPosition);
 	newTail.body.setPosition(newTailPosition); // changing it's position
 
-	// std::cout << newTailPosition.x << "\t" << newTailPosition.y << "\n";
-	if (getBoardElement(newTailPosition)) { /*TODO: BUG... died = true; std::cout << "log0\n";*/ } // if there is a cell at the new tail, then the snake hits itself, then die...
+	// I think it is not possible that the new tail cell generated
+	// will touch the body on spawning... so I'm skipping snake hits itself check...
 
-	// even if the snake dies(or maybe not) let the player actually see that the snake hits itself.... so let's continue....
 	setBoardElement(newTailPosition, true); // make the new cell alive in the board
 	snake_dq.push_back(newTail); // push it to the snake_dq
 }
@@ -124,15 +122,14 @@ void Snake::addCellAtFront(sf::Vector2f bodyPosition, const direction bodyDirect
 	newHead.bodyDirection = bodyDirection; // direction
 	newHead.body.setFillColor(sf::Color::Magenta); // it's color(head's color is different from body color)
 
-	if (getBoardElement(bodyPosition)) { died = true; /*std::cout << "log1\n";*/ } // if there is a cell at the new head, then the snake hits itself, then die...
+	if (getBoardElement(bodyPosition)) died = true; // if there is a cell at the new head, then the snake hits itself, then die...
 
 	// even if the snake dies(or maybe not) let the player actually see that the snake hits itself.... so let's continue....
 	setBoardElement(bodyPosition, true); // make the new cell alive in the board
 	snake_dq.push_front(newHead); // push it to the snake_dq
 
-	Cell lastCell = *snake_dq.end();
+	Cell lastCell = *snake_dq.end(); // FIXME: it is causing the same problem as on line number 50(Snake.cpp)...
 	setBoardElement(lastCell.body.getPosition(), false); // make the last cell dead in the board
-	// std::cout << lastCell.body.getPosition().x << "\t" << lastCell.body.getPosition().y << "\n";
 	snake_dq.pop_back(); // delete the last cell
 }
 

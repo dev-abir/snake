@@ -61,7 +61,7 @@ int main() {
 		window.draw(snake);
 		window.display();
 
-		if (snake.isDied()) { std::cout << "snake hits itself" << std::endl; window.close(); }
+		if (snake.isDied()) { std::cout << "game over, snake hits itself" << std::endl; window.close(); }
 	}
 
 	return 0;
