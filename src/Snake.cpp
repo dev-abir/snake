@@ -10,6 +10,7 @@ Snake::Snake() : died(false) {
 	}
 	/**/
 
+	// WARNING: the whole codebase is based on the assumption, that there will be at least 2 or more cells at first...
 	for (unsigned int i = 0; i < 5; ++i) {
 		snake_dq.emplace_back(
 			sf::RectangleShape(sf::Vector2f(SNAKE_CELL_WIDTH - SNAKE_CELL_BORDER_WIDTH, SNAKE_CELL_HEIGHT - SNAKE_CELL_BORDER_WIDTH)),
@@ -47,11 +48,8 @@ void Snake::setNewFoodPosition(sf::RectangleShape & food) const {
 bool Snake::isDied() const { return died; }
 
 void Snake::grow() {
-	Cell newTail = *(--snake_dq.end()); // making a copy of the last-but-one cell
-										// TODO(RESEARCH): for some reason the snake_dq.pop_back();
-										// in Snake::addCellAtFront(...) doesn't delete the
-										// last cell till this point (the last cell will be deleted in the future)
-										// so I am copying the last-but-one cell... BTW, snake_dq.end()--, will not work...
+	Cell newTail = *(--snake_dq.end()); // making a copy of the last cell
+										// (STL containers contain one element extra after the last element, so '--')
 	direction tailDirection = newTail.bodyDirection;
 	sf::Vector2f newTailPosition = newTail.body.getPosition();
 	if (tailDirection == direction::UP) newTailPosition.y += SNAKE_CELL_HEIGHT;
@@ -128,7 +126,7 @@ void Snake::addCellAtFront(sf::Vector2f bodyPosition, const direction bodyDirect
 	setBoardElement(bodyPosition, true); // make the new cell alive in the board
 	snake_dq.push_front(newHead); // push it to the snake_dq
 
-	Cell lastCell = *snake_dq.end(); // FIXME: it is causing the same problem as on line number 50(Snake.cpp)...
+	Cell lastCell = *(--snake_dq.end()); // (STL containers contain one element extra after the last element, so '--')
 	setBoardElement(lastCell.body.getPosition(), false); // make the last cell dead in the board
 	snake_dq.pop_back(); // delete the last cell
 }
