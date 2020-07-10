@@ -3,6 +3,7 @@
 
 #include <deque>
 #include <iostream>
+#include <memory>
 
 #include <SFML/Graphics.hpp>
 

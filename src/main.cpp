@@ -1,7 +1,4 @@
 #include <iostream>
-#include <vector>
-#include <memory>
-#include <array>
 
 #include <SFML/Graphics.hpp>
 
