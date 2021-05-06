@@ -34,7 +34,7 @@ void Snake::setNewFoodPosition(sf::RectangleShape & food) const {
 	// when the snake is very large... I may change it in the future...
 	while (true) {
 		bool intersect = false;
-		food.setPosition((int)(rand() % SCREEN_WIDTH), (int)(rand() % SCREEN_HEIGHT));
+		food.setPosition((int)(rand() % (SCREEN_WIDTH - SNAKE_CELL_WIDTH)), (int)(rand() % (SCREEN_HEIGHT - SNAKE_CELL_HEIGHT)));
 		for (const Cell & cell : snake_dq) {
 			if (cell.body.getGlobalBounds().intersects(food.getGlobalBounds())) {
 				intersect = true;

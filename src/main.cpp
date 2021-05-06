@@ -14,7 +14,7 @@ int main() {
 #endif
 
 	Snake snake;
-	sf::RectangleShape food(sf::Vector2f(FOOD_WIDTH, FOOD_HEIGHT)); // I may create food class later, but for now.....
+	sf::RectangleShape food(sf::Vector2f(FOOD_WIDTH - SNAKE_CELL_BORDER_WIDTH, FOOD_HEIGHT - SNAKE_CELL_BORDER_WIDTH)); // I may create food class later, but for now.....
 	food.setFillColor(sf::Color::Red);
 	snake.setNewFoodPosition(food);
 
